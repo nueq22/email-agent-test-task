@@ -1,0 +1,21 @@
+@reference 'tailwindcss';
+
+.header {
+    @apply p-4 flex justify-between items-center border-b border-gray-200 gap-3;
+}
+
+.name {
+    @apply flex items-center text-base font-bold gap-2 flex-wrap overflow-hidden;
+}
+
+.email {
+    @apply font-normal text-xs text-gray-500 lowercase;
+}
+
+.date {
+    @apply text-xs text-gray-500 whitespace-nowrap;
+}
+
+.content {
+    @apply p-4;
+}

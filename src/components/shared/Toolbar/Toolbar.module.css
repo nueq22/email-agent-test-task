@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+.toolbar {
+    @apply flex gap-3 border-b border-gray-200 px-4 justify-end;
+}
+
+.button {
+    @apply cursor-pointer p-2;
+}

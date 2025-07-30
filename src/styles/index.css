@@ -1,0 +1,6 @@
+@import "tailwindcss";
+@import "./overrides.css";
+
+.desktop-only {
+    @apply hidden md:block;
+}

@@ -1,0 +1,5 @@
+# Run lint-staged for other linting tasks
+npx lint-staged
+
+# Run TypeScript type checking
+npx tsc --noEmit --incremental false --pretty --project tsconfig.json

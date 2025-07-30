@@ -1,0 +1,48 @@
+@reference 'tailwindcss';
+
+.sidebar {
+    @apply px-2
+        py-4
+        h-full
+        bg-gray-800
+        text-white
+        flex
+        flex-col
+        shadow-lg
+        md:w-80
+        md:px-3;
+}
+
+.list {
+    @apply flex-1 overflow-y-auto px-1;
+}
+
+.button {
+    @apply flex
+        w-full
+        items-center
+        justify-between
+        px-3
+        py-2
+        my-1
+        rounded-2xl
+        cursor-pointer transition-colors
+        duration-200
+        select-none
+        gap-2
+        focus:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-blue-500;
+}
+
+.button:hover {
+    @apply bg-gray-700;
+}
+
+.button.selected {
+    @apply bg-blue-500;
+}
+
+.label {
+    @apply flex items-center gap-3;
+}

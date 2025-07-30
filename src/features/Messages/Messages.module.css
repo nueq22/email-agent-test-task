@@ -1,0 +1,9 @@
+@reference 'tailwindcss';
+
+.messages {
+    @apply md:w-120 border-r border-gray-200 h-full overflow-y-auto overflow-x-hidden relative;
+}
+
+.linearLoader {
+    @apply absolute top-0 left-0 right-0;
+}

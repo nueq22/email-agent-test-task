@@ -1,0 +1,4 @@
+:root {
+    --contexify-activeItem-bgColor: var(--color-blue-500);
+    --contexify-menu-minWidth: 140px;
+}

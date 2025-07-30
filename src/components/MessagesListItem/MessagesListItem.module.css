@@ -1,0 +1,47 @@
+@reference 'tailwindcss';
+
+.item {
+    @apply relative
+        rounded-xl
+        p-4
+        pl-6
+        border
+        border-transparent
+        transition-all
+        cursor-pointer
+        hover:shadow-md
+        hover:border-gray-100
+        select-none;
+}
+
+.item.unread::after {
+    content: "";
+
+    @apply absolute
+        top-5
+        left-2
+        min-h-[8px]
+        min-w-[8px]
+        rounded-full
+        bg-blue-600;
+}
+
+.item.selected {
+    @apply bg-gray-100;
+}
+
+.date {
+    @apply text-xs text-gray-500;
+}
+
+.name {
+    @apply text-sm font-semibold line-clamp-1;
+}
+
+.subject {
+    @apply text-sm text-gray-700 line-clamp-1;
+}
+
+.content {
+    @apply text-sm text-gray-400 line-clamp-1;
+}
