@@ -13,6 +13,7 @@ import SplashScreen from "../../components/shared/SplashScreen/SplashScreen";
 import { useMessages } from "../../hooks/app/useMessages.ts";
 import { useMessagesContextMenuActions } from "../../hooks/app/useMessagesContextMenuActions.ts";
 import styles from "./Messages.module.css";
+import MessagesSearchInput from "./SearchInput.tsx";
 
 const AppMessages: React.FC = () => {
   const id = useId();
@@ -56,6 +57,7 @@ const AppMessages: React.FC = () => {
 
   return wrapper(
     <>
+      <MessagesSearchInput />
       {list.length === 0 && (
         <>
           {isLoading && <SplashLoader />}

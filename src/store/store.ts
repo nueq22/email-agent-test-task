@@ -1,8 +1,5 @@
 import { distinctUntilChanged, filter } from "rxjs";
 
-import type { IFolder } from "../types/folder";
-import type { IMessage } from "../types/message";
-
 import { FoldersStore } from "./folders";
 import { MessagesStore } from "./messages";
 
@@ -11,14 +8,14 @@ export class Store {
   public messages: MessagesStore;
 
   constructor({
-    foldersFetcher,
-    messagesFetcher,
+    folders,
+    messages,
   }: {
-    foldersFetcher: () => Promise<IFolder[]>;
-    messagesFetcher: (folderId: string) => Promise<IMessage[]>;
+    folders: FoldersStore;
+    messages: MessagesStore;
   }) {
-    this.folders = new FoldersStore(foldersFetcher);
-    this.messages = new MessagesStore(messagesFetcher);
+    this.folders = folders;
+    this.messages = messages;
 
     this.folders.selected$
       .pipe(
@@ -26,7 +23,7 @@ export class Store {
         distinctUntilChanged(),
       )
       .subscribe((folderId) => {
-        this.messages.fetchMessages(folderId);
+        this.messages.setFolderId(folderId);
       });
   }
 }

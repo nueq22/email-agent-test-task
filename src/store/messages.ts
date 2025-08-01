@@ -1,20 +1,31 @@
-import { BehaviorSubject, combineLatest, map } from "rxjs";
+import { BehaviorSubject, combineLatest, filter, map } from "rxjs";
 
 import type { IMessage } from "../types/message";
+
+export interface IMessagesQueryParams {
+  folderId: string | null;
+  query: string;
+}
 
 export class MessagesStore {
   private error = new BehaviorSubject<string | null>(null);
   public error$ = this.error.asObservable();
-
   private isLoading = new BehaviorSubject<boolean>(false);
+
   public isLoading$ = this.isLoading.asObservable();
-
   private messagesList = new BehaviorSubject<IMessage[]>([]);
-  public messagesList$ = this.messagesList.asObservable();
 
+  public messagesList$ = this.messagesList.asObservable();
+  private queryParams = new BehaviorSubject<IMessagesQueryParams>({
+    folderId: null,
+    query: "",
+  });
+
+  public queryParams$ = this.queryParams.asObservable();
   private messagesMap = new BehaviorSubject<Map<string, IMessage>>(new Map());
 
   private selected = new BehaviorSubject<string | null>(null);
+
   public selected$ = combineLatest([this.messagesMap, this.selected]).pipe(
     map(([messagesMap, selected]) => {
       if (selected === null) {
@@ -25,10 +36,14 @@ export class MessagesStore {
     }),
   );
 
-  private fetcher: (folderId: string) => Promise<IMessage[]>;
+  private fetcher: (params: IMessagesQueryParams) => Promise<IMessage[]>;
 
-  constructor(messagesFetcher: (folderId: string) => Promise<IMessage[]>) {
+  constructor(
+    messagesFetcher: (params: IMessagesQueryParams) => Promise<IMessage[]>,
+  ) {
     this.fetcher = messagesFetcher;
+
+    this.initializeQuerySubscriber();
 
     this.messagesMap.subscribe((messagesMap) => {
       this.updateList(messagesMap);
@@ -39,11 +54,11 @@ export class MessagesStore {
     this.upsertMessage({ ...message, isDeleted: true });
   }
 
-  public async fetchMessages(folderId: string) {
+  public async fetchMessages() {
     try {
       this.error.next(null);
       this.isLoading.next(true);
-      const messages = await this.fetcher(folderId);
+      const messages = await this.fetcher(this.queryParams.value);
       this.messagesMap.next(
         new Map(messages.map((message) => [message.id, message])),
       );
@@ -67,11 +82,35 @@ export class MessagesStore {
     this.selected.next(messageId);
   }
 
+  public setFolderId(value: string) {
+    this.setSearchQuery("");
+    this.setQueryParam("folderId", value);
+  }
+
+  public setSearchQuery(value: string) {
+    this.setQueryParam("query", value);
+  }
+
   public updateMessage(messageId: string, updates: Partial<IMessage>) {
     const existing = this.messagesMap.value.get(messageId);
     if (existing) {
       this.upsertMessage({ ...existing, ...updates });
     }
+  }
+
+  private initializeQuerySubscriber() {
+    this.queryParams$
+      .pipe(filter((query) => query.folderId !== null))
+      .subscribe(() => {
+        this.fetchMessages();
+      });
+  }
+
+  private setQueryParam(key: keyof IMessagesQueryParams, value: string) {
+    this.queryParams.next({
+      ...this.queryParams.value,
+      [key]: value,
+    });
   }
 
   private updateList(messagesMap: Map<string, IMessage>) {

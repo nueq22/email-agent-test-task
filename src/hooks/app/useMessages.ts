@@ -27,6 +27,10 @@ export function useMessages() {
     store.messages.deleteMessage(message);
   }, []);
 
+  const setSearchQuery = useCallback((query: string) => {
+    store.messages.setSearchQuery(query);
+  }, []);
+
   return {
     list,
     isLoading,
@@ -36,5 +40,6 @@ export function useMessages() {
     toggleIsReadFlag,
     deleteMessage,
     insertMessage,
+    setSearchQuery,
   };
 }

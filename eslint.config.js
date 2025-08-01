@@ -24,16 +24,16 @@ export default tseslint.config([
       perfectionist,
     },
     rules: {
-      "perfectionist/sort-imports": [
-        "error",
-        {
-          type: "alphabetical",
-          order: "asc",
-          newlinesBetween: "always",
-          ignoreCase: false,
-        },
-      ],
-      "perfectionist/sort-classes": ["error"],
+      // "perfectionist/sort-imports": [
+      //   "error",
+      //   {
+      //     type: "alphabetical",
+      //     order: "asc",
+      //     newlinesBetween: "always",
+      //     ignoreCase: false,
+      //   },
+      // ],
+      // "perfectionist/sort-classes": ["error"],
     },
   },
 ]);

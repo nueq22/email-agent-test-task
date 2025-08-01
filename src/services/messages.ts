@@ -1,5 +1,6 @@
 import { faker } from "@faker-js/faker";
 
+import type { IMessagesQueryParams } from "../store/messages";
 import type { IMessage } from "../types/message";
 
 import { createMessage } from "../stubs/messages";
@@ -12,15 +13,35 @@ const mockedResponses: Record<string, IMessage[]> = {
   empty: [],
 };
 
-export function fetchMessages(folderId: string): Promise<IMessage[]> {
+export function fetchMessages(
+  params: IMessagesQueryParams,
+): Promise<IMessage[]> {
   return new Promise((resolve, reject) => {
     setTimeout(
       () => {
-        const messages = mockedResponses[folderId];
+        console.log("q", params);
+        let messages =
+          params.folderId &&
+          Object.hasOwnProperty.call(mockedResponses, params.folderId)
+            ? mockedResponses[params.folderId]
+            : null;
+
         if (messages) {
+          if (params.query) {
+            messages = messages.filter((message) =>
+              [
+                message.from.name,
+                message.from.email,
+                message.subject,
+                message.content,
+              ].some((field) =>
+                field.toLowerCase().includes(params.query.toLowerCase()),
+              ),
+            );
+          }
           resolve(messages);
         } else {
-          reject(new Error(`Folder ${folderId} not found`));
+          reject(new Error(`Folder ${params.folderId} not found`));
         }
       },
       faker.number.int({ min: 500, max: 1000 }),
