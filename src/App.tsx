@@ -23,7 +23,7 @@ function App() {
       playNotificationSound();
     },
     // enable receiving a new email simulation for the selected messages folder
-    enabled: false,
+    enabled: true,
   });
 
   useEffect(() => {
