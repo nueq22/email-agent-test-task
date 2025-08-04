@@ -17,9 +17,16 @@ export function useAppKeybindings() {
     };
 
     return {
-      Escape: () => selectMessage(null),
-      Delete: deleteWithConfirmation,
-      Backspace: deleteWithConfirmation,
+      Escape: {
+        handler: () => selectMessage(null),
+      },
+      Delete: {
+        handler: deleteWithConfirmation,
+      },
+      Backspace: {
+        modifier: "ctrlKey" as const,
+        handler: deleteWithConfirmation,
+      },
     };
   }, [selected, selectMessage, deleteMessage]);
 

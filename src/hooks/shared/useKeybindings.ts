@@ -1,17 +1,28 @@
 import { useEffect } from "react";
 
-export function useKeyBindings(keymap?: { [key: string]: () => void }) {
+export function useKeyBindings(keymap?: {
+  [key: string]: {
+    modifier?: "ctrlKey" | "shiftKey" | "altKey" | "metaKey";
+    handler: () => void;
+  };
+}) {
   useEffect(() => {
     if (!keymap) {
       return;
     }
 
     function handleKeyDown(event: KeyboardEvent) {
-      const handler = keymap?.[event.key];
+      const config = keymap?.[event.key];
 
-      if (handler) {
-        handler();
+      if (!config) {
+        return;
       }
+
+      if (config.modifier && !event[config.modifier]) {
+        return;
+      }
+
+      config.handler();
     }
 
     window.addEventListener("keydown", handleKeyDown);
